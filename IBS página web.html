@@ -1,0 +1,808 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="es"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Guía Interactiva: Controlador de Dosificación&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.jsdelivr.net/npm/chart.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@font-face {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-style: normal;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 400;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>src: local('Inter Regular'), local('Inter-Regular');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@font-face {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-style: normal;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 500;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>src: local('Inter Medium'), local('Inter-Medium');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@font-face {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-style: normal;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>src: local('Inter SemiBold'), local('Inter-SemiBold');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@font-face {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-style: normal;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>src: local('Inter Bold'), local('Inter-Bold');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>:root {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--bg-main: #f0f4f8;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--bg-sidebar: #ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--bg-header: #1e3a8a;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--text-dark: #1e293b;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--text-light: #ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--primary: #1e40af;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--primary-dark: #1e3a8a;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--border-color: #e2e8f0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--shadow-color: rgba(0, 0, 0, 0.08);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--warning-bg: #fef3c7;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--warning-border: #d97706;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--danger-bg: #fee2e2;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--danger-border: #dc2626;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--success-bg: #dcfce7;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--success-border: #16a34a;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--lcd-bg: #a8d5e5;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--lcd-text: #002b49;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>* {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-sizing: border-box;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>scroll-behavior: smooth;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--bg-main);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: var(--text-dark);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.flex-container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* --- Sidebar --- */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sidebar {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 280px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: var(--bg-sidebar);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 2px 0 8px var(--shadow-color);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: sticky;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: transform 0.3s ease-in-out;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 100;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sidebar-header {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 1px solid var(--border-color);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sidebar-header h1 {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.6rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: var(--primary-dark);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sidebar-header p {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.9rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #64748b;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sidebar nav {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow-y: auto;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: calc(100vh - 100px);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sidebar-link {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 0.9rem 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: var(--text-dark);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-decoration: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.2s ease;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-left: 4px solid transparent;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 500;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sidebar-link:hover, .sidebar-link.active {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: rgba(30, 64, 175, 0.08);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: var(--primary);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-left-color: var(--primary);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sidebar-link i {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 24px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-right: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #64748b;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sidebar-link.active i, .sidebar-link:hover i {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: var(--primary);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* --- Main Content --- */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.main-content {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex: 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 2.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow-y: auto;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.content-section {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.content-section.active {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: fadeIn 0.5s ease;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes fadeIn {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>from { opacity: 0; transform: translateY(15px); }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>to { opacity: 1; transform: translateY(0); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* --- General Elements --- */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>h1, h2, h3, h4 {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: var(--primary-dark);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 1rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1.3;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>h1 {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 2px solid var(--border-color);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding-bottom: 0.8rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 2rem;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>h2 {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 1px solid var(--border-color);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding-bottom: 0.6rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 2.5rem 0 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>h3 { font-size: 1.5rem; margin: 2rem 0 1rem; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>h4 { font-size: 1.2rem; margin: 1.5rem 0 0.8rem; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>p { margin-bottom: 1rem; line-height: 1.7; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>ul, ol { margin-left: 1.5rem; margin-bottom: 1rem; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>li { margin-bottom: 0.5rem; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 1.8rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 2rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 12px var(--shadow-color);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid var(--border-color);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.alert {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 1.2rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 1.5rem 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-left: 5px solid;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.alert i { font-size: 1.5rem; margin-right: 1rem; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.alert.warning { background: var(--warning-bg); border-color: var(--warning-border); color: #92400e; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.alert.danger { background: var(--danger-bg); border-color: var(--danger-border); color: #991b1b; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.alert.success { background: var(--success-bg); border-color: var(--success-border); color: #065f46; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.function-code {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Courier New', monospace;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #eef2ff;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 0.2rem 0.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: var(--primary-dark);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #c7d2fe;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>table {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-collapse: collapse;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 1.5rem 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 6px var(--shadow-color);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>th { background: #f1f5f9; font-weight: 600; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>tr:last-child td { border-bottom: none; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.button {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: var(--primary);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 0.8rem 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 6px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: inline-flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: background 0.3s;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.button:hover { background: var(--primary-dark); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.button i { margin-right: 0.5rem; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* --- Simulator --- */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.simulator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.controller-panel { background: #475569; padding: 1.5rem; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.1); max-width: 450px; margin: 0 auto; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.lcd-screen { background: var(--lcd-bg); color: var(--lcd-text); font-family: 'Courier New', monospace; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; min-height: 100px; display: flex; flex-direction: column; justify-content: space-between; border: 3px solid #334155; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.lcd-line { display: flex; justify-content: space-between; font-size: 1.6rem; font-weight: bold; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.keypad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.7rem; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key { background: #e2e8f0; border: none; border-radius: 8px; font-size: 1.2rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px #94a3b8; transition: all 0.1s ease; height: 60px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key:active { transform: translateY(2px); box-shadow: 0 2px #94a3b8; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key.func { background: #64748b; color: white; box-shadow: 0 4px #334155; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key.start { background: var(--success-border); color: white; box-shadow: 0 4px #065f46; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key.stop { background: var(--danger-border); color: white; box-shadow: 0 4px #991b1b; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.key.reset { background: var(--warning-border); color: white; box-shadow: 0 4px #92400e; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.step-instruction { margin-bottom: 1.2rem; padding: 1rem; border-radius: 8px; background: #f8fafc; transition: all 0.3s ease; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.step-instruction.active { background: var(--success-bg); border-left: 4px solid var(--success-border); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.progress-bar { height: 20px; background: #e2e8f0; border-radius: 10px; overflow: hidden; margin: 1rem 0; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.progress-fill { height: 100%; background: linear-gradient(90deg, #34d399, #10b981); width: 0%; transition: width 0.5s ease; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.chart-container { height: 300px; margin: 1.5rem 0; }</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* --- Mobile / Responsive --- */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.mobile-menu-btn { display: none; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@media (max-width: 1024px) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.flex-container { flex-direction: column; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.sidebar {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>position: fixed;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>left: -300px;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>z-index: 1000;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>transition: left 0.3s ease;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.sidebar.open { left: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.main-content { padding: 1.5rem; padding-top: 5rem; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.mobile-menu-btn {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>display: block; position: fixed; top: 1rem; left: 1rem; z-index: 1001;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>background: white; border: none; border-radius: 5px; padding: 0.5rem 0.8rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.simulator-grid { grid-template-columns: 1fr; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.instructions { margin-bottom: 2rem; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>table { display: block; overflow-x: auto; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="mobile-menu-btn" id="mobileMenuButton"&gt;&lt;i class="fas fa-bars"&gt;&lt;/i&gt;&lt;/button&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="flex-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;aside class="sidebar" id="sidebar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="sidebar-header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1&gt;Controlador de Dosificación&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;Guía de Operación&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;nav&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#intro" class="sidebar-link active"&gt;&lt;i class="fas fa-home"&gt;&lt;/i&gt; Introducción&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#seguridad" class="sidebar-link"&gt;&lt;i class="fas fa-shield-alt"&gt;&lt;/i&gt; Seguridad&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#operacion" class="sidebar-link"&gt;&lt;i class="fas fa-play-circle"&gt;&lt;/i&gt; Operación Básica&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#simulador" class="sidebar-link"&gt;&lt;i class="fas fa-gamepad"&gt;&lt;/i&gt; Simulador Interactivo&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#config_sensor" class="sidebar-link"&gt;&lt;i class="fas fa-tachometer-alt"&gt;&lt;/i&gt; Configurar Sensor&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#config_corte" class="sidebar-link"&gt;&lt;i class="fas fa-cut"&gt;&lt;/i&gt; Puntos de Corte&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#config_monitoreo" class="sidebar-link"&gt;&lt;i class="fas fa-tv"&gt;&lt;/i&gt; Monitoreo y Alarmas&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#config_io" class="sidebar-link"&gt;&lt;i class="fas fa-project-diagram"&gt;&lt;/i&gt; Entradas/Salidas&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#config_comm" class="sidebar-link"&gt;&lt;i class="fas fa-network-wired"&gt;&lt;/i&gt; Comunicación&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#errores" class="sidebar-link"&gt;&lt;i class="fas fa-exclamation-triangle"&gt;&lt;/i&gt; Solución de Errores&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#registro" class="sidebar-link"&gt;&lt;i class="fas fa-clipboard-check"&gt;&lt;/i&gt; Registro de Configuración&lt;/a&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/nav&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/aside&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;main class="main-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="intro" class="content-section active"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1&gt;Guía Interactiva del Controlador&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Este documento es una guía completa e interactiva para la configuración y operación del controlador de dosificación. Está diseñado para que tanto técnicos como operadores puedan consultar procedimientos y practicar operaciones de forma segura.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="alert warning"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i class="fas fa-triangle-exclamation"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div&gt;&lt;strong&gt;Importante:&lt;/strong&gt; Este procedimiento debe ser realizado solo por personal autorizado y capacitado. Siga siempre las normas de seguridad de su planta.&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button class="button" onclick="window.print()"&gt;&lt;i class="fas fa-print"&gt;&lt;/i&gt; Imprimir Guía&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="seguridad" class="content-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1&gt;Consideraciones de Seguridad&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;La seguridad es la máxima prioridad. Antes de realizar cualquier configuración o mantenimiento, asegúrese de cumplir con los siguientes puntos críticos.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="alert danger"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i class="fas fa-skull-crossbones"&gt;&lt;/i&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p&gt;&lt;strong&gt;Peligro: Riesgo Eléctrico y de Proceso&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;li&gt;&lt;strong&gt;Personal Autorizado:&lt;/strong&gt; Solo ingenieros o electricistas calificados deben instalar y configurar el dispositivo.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;li&gt;&lt;strong&gt;Desconexión Eléctrica:&lt;/strong&gt; Asegúrese de que el equipo esté desconectado de la fuente de alimentación antes de manipular el cableado.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;li&gt;&lt;strong&gt;Parada de Emergencia:&lt;/strong&gt; Familiarícese con la ubicación y el funcionamiento del interruptor de parada de emergencia.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="operacion" class="content-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1&gt;Puesta en Marcha y Operación Básica&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Proceso de Dosificación Estándar&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;ol&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;&lt;strong&gt;Preparar Lote:&lt;/strong&gt; Presione &lt;strong&gt;[RESET]&lt;/strong&gt;, ingrese la cantidad deseada con el teclado numérico y confirme con &lt;strong&gt;[SET]&lt;/strong&gt;.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;&lt;strong&gt;Iniciar/Detener:&lt;/strong&gt; Presione &lt;strong&gt;[START]&lt;/strong&gt; para comenzar. Use &lt;strong&gt;[STOP]&lt;/strong&gt; para pausar y &lt;strong&gt;[START]&lt;/strong&gt; para reanudar.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;&lt;strong&gt;Finalizar Lote:&lt;/strong&gt; Una vez completado, presione &lt;strong&gt;[RESET]&lt;/strong&gt; para finalizar. Para repetir el mismo lote, presione &lt;strong&gt;[SET]&lt;/strong&gt; y luego &lt;strong&gt;[START]&lt;/strong&gt;.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/ol&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="simulador" class="content-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>&lt;h1&gt;Simulador de Operación&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>&lt;div class="simulator-grid"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="instructions card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3&gt;Siga las instrucciones para una dosificación:&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div id="steps-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                           </span>&lt;div id="step-1" class="step-instruction active"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;strong&gt;Paso 1: Preparar Lote.&lt;/strong&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p&gt;Presione la tecla &lt;strong&gt;[RESET]&lt;/strong&gt; para borrar el lote anterior.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                           </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                           </span>&lt;div id="step-2" class="step-instruction"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;strong&gt;Paso 2: Ingresar Cantidad.&lt;/strong&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p&gt;Use el teclado para ingresar &lt;strong&gt;1500&lt;/strong&gt; kg.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                           </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                           </span>&lt;div id="step-3" class="step-instruction"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;strong&gt;Paso 3: Confirmar.&lt;/strong&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p&gt;Presione la tecla &lt;strong&gt;[Set]&lt;/strong&gt; para confirmar el valor.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                           </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div id="step-4" class="step-instruction"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;strong&gt;Paso 4: Iniciar.&lt;/strong&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p&gt;Presione &lt;strong&gt;[Start]&lt;/strong&gt; para comenzar la dosificación.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                           </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                           </span>&lt;div id="step-5" class="step-instruction"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;strong&gt;Paso 5: Proceso Completo.&lt;/strong&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p&gt;¡Lote finalizado con éxito! Presione &lt;strong&gt;[RESET]&lt;/strong&gt; para comenzar de nuevo.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                           </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="controller-panel"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="lcd-screen" id="simulator-lcd"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div class="lcd-line"&gt;&lt;span&gt;Pres&lt;/span&gt;&lt;span id="preset-value-sim"&gt;0 kg&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div class="lcd-line"&gt;&lt;span&gt;B&lt;/span&gt;&lt;span id="batch-value-sim"&gt;0 kg&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="keypad"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key" data-key="1"&gt;1&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key" data-key="2"&gt;2&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key" data-key="3"&gt;3&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key func" data-key="Set"&gt;Set&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key start" data-key="Start"&gt;Start&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key" data-key="4"&gt;4&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key" data-key="5"&gt;5&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key" data-key="6"&gt;6&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key func" data-key="F1"&gt;F1&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key stop" data-key="Stop"&gt;Stop&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key" data-key="7"&gt;7&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key" data-key="8"&gt;8&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key" data-key="9"&gt;9&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key func" data-key="F2"&gt;F2&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key func" data-key="F3"&gt;F3&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key reset" data-key="RESET"&gt;RESET&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key" data-key="0"&gt;0&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key" data-key="#"&gt;#&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key func" data-key="Menu"&gt;Menu&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="key func" data-key="RC"&gt;RC&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="card" style="margin-top: 1.5rem;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h4&gt;Progreso de Dosificación&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="progress-bar"&gt;&lt;div class="progress-fill" id="progress-fill"&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;p id="progress-text"&gt;Esperando inicio...&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="config_sensor" class="content-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1&gt;Configuración del Sensor y Rango&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>&lt;h3&gt;Rango de Medición (&lt;span class="function-code"&gt;Función 4.2.x&lt;/span&gt;)&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>&lt;p&gt;Esta es la configuración más fundamental. Acceda a través de &lt;strong&gt;[Menu] &amp;rarr; 4.0 Install&lt;/strong&gt;.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>&lt;table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Función&lt;/th&gt;&lt;th&gt;Parámetro&lt;/th&gt;&lt;th&gt;Descripción y Opciones&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;4.2.1&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Unidad de Medida&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Define la unidad para la dosificación (ej. kg, l, m³).&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;4.2.2&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Decimales&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Establece la precisión de la pantalla.&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                             </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;4.2.3&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Valor Final de Escala&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Corresponde al flujo máximo que el sensor puede medir.&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;4.2.4&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Pulsos por Unidad&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Para medidores de pulso, define la relación entre pulsos y unidad.&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="config_corte" class="content-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1&gt;Puntos de Corte para Dosificación Precisa&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Los puntos de corte son cruciales para evitar sobrellenado. Permiten reducir el flujo de forma controlada antes de alcanzar la cantidad objetivo.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Corte Digital (&lt;span class="function-code"&gt;Función 1.1.x&lt;/span&gt;)&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Ideal para control On/Off. Permite definir hasta tres puntos de corte que desactivan salidas digitales a medida que se acerca al final del lote.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Corte Analógico y Rampas (&lt;span class="function-code"&gt;Función 1.2.x, 1.3, 1.4&lt;/span&gt;)&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Proporciona un control proporcional (4-20 mA), reduciendo el flujo gradualmente en hasta seis pasos para máxima precisión. Las rampas evitan "golpes de ariete".&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="chart-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;canvas id="shutoffChart"&gt;&lt;/canvas&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="config_monitoreo" class="content-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1&gt;Monitoreo y Alarmas&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Sistema de Monitoreo y Alarmas&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;El controlador incluye un sistema completo de monitoreo y alarmas para garantizar un funcionamiento seguro y confiable.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Tipo de Alarma&lt;/th&gt;&lt;th&gt;Descripción&lt;/th&gt;&lt;th&gt;Acción Recomendada&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;Alarma de Flujo&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Se activa cuando el flujo está fuera de los parámetros establecidos&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Verificar sensor y condiciones del proceso&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;Alarma de Temperatura&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Temperatura fuera del rango permitido&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Verificar sistema de enfriamiento/calentamiento&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;Alarma de Comunicación&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Pérdida de comunicación con dispositivos externos&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Verificar conexiones y configuraciones de red&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="config_io" class="content-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1&gt;Entradas y Salidas&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Configuración de Entradas y Salidas&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Configure las entradas y salidas del controlador según los requisitos específicos de su aplicación.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Puerto&lt;/th&gt;&lt;th&gt;Tipo&lt;/th&gt;&lt;th&gt;Función&lt;/th&gt;&lt;th&gt;Configuración&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;DI1&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Entrada Digital&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Inicio de Ciclo&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Normalmente Abierto&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;DO1&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Salida Digital&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Válvula Principal&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Activación por Lógica Positiva&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;AI1&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Entrada Analógica&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Sensor de Flujo&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;4-20 mA, 1000 L/min máximo&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="config_comm" class="content-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1&gt;Comunicación&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Configuración de Comunicación&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;El controlador soporta múltiples protocolos de comunicación para integración con sistemas de control superiores.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Protocolo&lt;/th&gt;&lt;th&gt;Velocidad&lt;/th&gt;&lt;th&gt;Configuración&lt;/th&gt;&lt;th&gt;Aplicación&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;Modbus RTU&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;19200 baud&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;8N1, Dirección 1&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;SCADA, HMI&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;Ethernet/IP&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;100 Mbps&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;DHCP, Puerto 44818&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Controladores PLC&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;Profibus DP&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;1.5 Mbps&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Dirección 3&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Sistemas de Automatización&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="errores" class="content-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1&gt;Solución de Errores&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Procedimiento de Solución de Problemas&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Guía rápida para identificar y resolver problemas comunes del controlador.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Código Error&lt;/th&gt;&lt;th&gt;Descripción&lt;/th&gt;&lt;th&gt;Solución&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;E001&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Error de sensor&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Verificar conexión y calibración del sensor&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;E102&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Comunicación perdida&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Verificar cableado y configuraciones de red&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;span class="function-code"&gt;E205&lt;/span&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Sobrecarga de salida&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Verificar carga eléctrica en salidas&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;section id="registro" class="content-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h1&gt;Registro de Configuración&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Formulario de Registro de Configuración&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Utilice este formulario para documentar las configuraciones actuales del controlador.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Parámetro&lt;/th&gt;&lt;th&gt;Valor Actual&lt;/th&gt;&lt;th&gt;Fecha&lt;/th&gt;&lt;th&gt;Técnico&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Rango de Medición&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;0-2000 kg&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Puntos de Corte&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;3 puntos configurados&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Protocolo Com.&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;Modbus RTU&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;td&gt;&lt;/td&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/tr&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/tbody&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/table&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button class="button" onclick="window.print()"&gt;&lt;i class="fas fa-print"&gt;&lt;/i&gt; Imprimir Configuración&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/main&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.addEventListener('DOMContentLoaded', function() {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const sidebar = document.getElementById('sidebar');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mobileMenuButton = document.getElementById('mobileMenuButton');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const sidebarLinks = document.querySelectorAll('.sidebar-link');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const contentSections = document.querySelectorAll('.content-section');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let chartInstance = null;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Navigation Logic ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateContent(hash) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const targetHash = hash || '#intro';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>sidebarLinks.forEach(link =&gt; link.classList.toggle('active', link.getAttribute('href') === targetHash));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>contentSections.forEach(section =&gt; section.classList.toggle('active', section.id === targetHash.substring(1)));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if(targetHash === '#config_corte' &amp;&amp; !chartInstance) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>renderShutoffChart();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>sidebarLinks.forEach(link =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>link.addEventListener('click', function(e) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const targetHash = this.getAttribute('href');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>history.pushState(null, null, targetHash);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>updateContent(targetHash);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (sidebar.classList.contains('open')) sidebar.classList.remove('open');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>mobileMenuButton.addEventListener('click', () =&gt; sidebar.classList.toggle('open'));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.addEventListener('popstate', () =&gt; updateContent(window.location.hash));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>updateContent(window.location.hash);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Chart.js Logic ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderShutoffChart() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const ctx = document.getElementById('shutoffChart').getContext('2d');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>chartInstance = new Chart(ctx, {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>type: 'line',</p>
+<p class="p1"><span class="Apple-converted-space">                </span>data: {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>labels: ['Inicio Lote', 'Corte 5', 'Corte 4', 'Corte 3', 'Corte 2', 'Corte 1', 'Final'],</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>datasets: [{</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>label: 'Señal de Válvula (mA) / Caudal',</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>data: [20, 20, 11, 10, 9, 7, 4],</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>borderColor: 'rgba(30, 64, 175, 1)',</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>backgroundColor: 'rgba(30, 64, 175, 0.1)',</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>stepped: true,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>borderWidth: 3,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>pointRadius: 5,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>pointBackgroundColor: 'rgba(30, 64, 175, 1)',</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>fill: true,</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}]</p>
+<p class="p1"><span class="Apple-converted-space">                </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                </span>options: {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>responsive: true,</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>maintainAspectRatio: false,</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>scales: { y: { beginAtZero: true, max: 22, title: { display: true, text: 'Señal (mA)' } }, x: { title: { display: true, text: 'Progreso del Lote (Hacia el final)' } } },</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>plugins: { title: { display: true, text: 'Visualización del Proceso de Corte Analógico', font: { size: 16 } } }</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Simulator Logic ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const simState = {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentStep: 1,</p>
+<p class="p1"><span class="Apple-converted-space">            </span>userInput: "",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>preset: "0",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>batched: "0",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>isBatching: false,</p>
+<p class="p1"><span class="Apple-converted-space">            </span>batchInterval: null,</p>
+<p class="p1"><span class="Apple-converted-space">            </span>targetPreset: "1500"</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const presetEl = document.getElementById('preset-value-sim');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const batchEl = document.getElementById('batch-value-sim');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const progressFill = document.getElementById('progress-fill');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const progressText = document.getElementById('progress-text');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const keypadButtons = document.querySelectorAll('.keypad .key');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateSimDisplay() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>presetEl.textContent = simState.userInput || simState.preset + " kg";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>batchEl.textContent = simState.batched + " kg";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateStep(step) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>simState.currentStep = step;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.step-instruction').forEach(el =&gt; el.classList.remove('active'));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const activeStep = document.getElementById(`step-${step}`);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (activeStep) activeStep.classList.add('active');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleKeyPress(key) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>switch(simState.currentStep) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 1: // Waiting for RESET</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (key === 'RESET') {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>simState.preset = "0";</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>simState.batched = "0";</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>simState.userInput = "";</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>updateStep(2);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 2: // Waiting for number input</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (!isNaN(key)) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>simState.userInput += key;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>if (simState.userInput === simState.targetPreset) {</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>updateStep(3);</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>} else if (key === 'RESET') { // Allow reset during input</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>simState.userInput = "";</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 3: // Waiting for Set</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (key === 'Set' &amp;&amp; simState.userInput === simState.targetPreset) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>simState.preset = simState.userInput;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>simState.userInput = "";</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>updateStep(4);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 4: // Waiting for Start</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (key === 'Start' &amp;&amp; !simState.isBatching) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>startBatching();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 5: // Batch finished</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>if (key === 'RESET') {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>resetSimulator();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (key === 'Stop' &amp;&amp; simState.isBatching) stopBatching();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateSimDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function startBatching() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>simState.isBatching = true;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let currentAmount = parseInt(simState.batched);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const targetAmount = parseInt(simState.preset);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>simState.batchInterval = setInterval(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>currentAmount += Math.round(targetAmount / 20); // Simulate fill speed</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (currentAmount &gt;= targetAmount) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>currentAmount = targetAmount;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>stopBatching();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>updateStep(5);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>progressText.textContent = "¡Dosificación Completada!";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>simState.batched = currentAmount.toString();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>let progress = (currentAmount / targetAmount) * 100;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>progressFill.style.width = `${progress}%`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>progressText.textContent = `Dosificando... ${currentAmount} / ${targetAmount} kg`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>updateSimDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}, 200);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function stopBatching() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>clearInterval(simState.batchInterval);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>simState.isBatching = false;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if(parseInt(simState.batched) &lt; parseInt(simState.preset)) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>progressText.textContent = `Pausado en ${simState.batched} kg. Presione START para continuar.`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function resetSimulator() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>stopBatching();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>Object.assign(simState, { currentStep: 1, userInput: "", preset: "0", batched: "0" });</p>
+<p class="p1"><span class="Apple-converted-space">            </span>progressFill.style.width = '0%';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>progressText.textContent = 'Esperando inicio...';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateStep(1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateSimDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>keypadButtons.forEach(btn =&gt; btn.addEventListener('click', () =&gt; handleKeyPress(btn.dataset.key)));</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>resetSimulator(); // Initial setup</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
