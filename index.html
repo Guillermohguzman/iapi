@@ -3,28 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guía Completa: Controlador de Dosificación Batching Master</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Simulador de Controlador de Dosificación</title>
     <style>
-        :root {
-            --bg-main: #f8f7f4;
-            --bg-sidebar: #ffffff;
-            --bg-header: #1e3a8a;
-            --text-dark: #34495e;
-            --text-light: #ffffff;
-            --primary: #1e40af;
-            --primary-dark: #1e3a8a;
-            --border-color: #e0e0e0;
-            --shadow-color: rgba(0, 0, 0, 0.08);
-            --warning-bg: #fef3c7;
-            --warning-border: #d97706;
-            --danger-bg: #fee2e2;
-            --danger-border: #ef4444;
-            --success-bg: #d1fae5;
-            --success-border: #10b981;
-        }
-        
         * {
             margin: 0;
             padding: 0;
@@ -33,9 +13,11 @@
         }
         
         body {
-            background-color: var(--bg-main);
-            color: var(--text-dark);
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+            color: #1e293b;
             line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 2rem;
         }
         
         .container {
@@ -45,14 +27,16 @@
         }
         
         header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
             color: white;
-            padding: 1.5rem 0;
+            padding: 1.2rem 0;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
-        .header-content {
+        nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -64,109 +48,48 @@
             letter-spacing: 1px;
         }
         
-        .flex-container {
+        .nav-links {
             display: flex;
-            min-height: calc(100vh - 120px);
+            list-style: none;
         }
         
-        /* Sidebar Styles */
-        .sidebar {
-            width: 280px;
-            background: var(--bg-sidebar);
-            box-shadow: 2px 0 5px var(--shadow-color);
-            padding: 1rem 0;
-            overflow-y: auto;
-            position: sticky;
-            top: 0;
-            height: 100vh;
+        .nav-links li {
+            margin-left: 1.8rem;
         }
         
-        .sidebar-header {
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 1rem;
-        }
-        
-        .sidebar-header h1 {
-            font-size: 1.4rem;
-            color: var(--primary-dark);
-        }
-        
-        .sidebar-header p {
-            font-size: 0.9rem;
-            color: #64748b;
-        }
-        
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            padding: 0.9rem 1.5rem;
-            color: var(--text-dark);
+        .nav-links a {
+            color: white;
             text-decoration: none;
-            transition: all 0.2s ease;
-            border-left: 4px solid transparent;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0.8rem;
+            border-radius: 4px;
         }
         
-        .sidebar-link:hover, .sidebar-link.active {
-            background-color: rgba(30, 64, 175, 0.08);
-            color: var(--primary-dark);
-            border-left-color: var(--primary);
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
         }
         
-        .sidebar-link i {
-            width: 24px;
-            margin-right: 12px;
-            text-align: center;
-        }
-        
-        /* Main Content Styles */
-        .main-content {
-            flex: 1;
+        section {
+            margin: 3rem 0;
             padding: 2rem;
-            overflow-y: auto;
-        }
-        
-        .content-section {
-            display: none;
-        }
-        
-        .content-section.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        h1, h2, h3, h4 {
-            color: var(--primary-dark);
-            margin-bottom: 1rem;
-        }
-        
-        h1 {
-            font-size: 2.2rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 0.5rem;
-            margin-bottom: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
         
         h2 {
-            font-size: 1.8rem;
-            border-bottom: 1px solid var(--border-color);
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #1e3a8a;
+            border-bottom: 2px solid #e2e8f0;
             padding-bottom: 0.5rem;
-            margin: 2.5rem 0 1.5rem;
         }
         
         h3 {
-            font-size: 1.4rem;
-            margin: 2rem 0 1rem;
-        }
-        
-        h4 {
-            font-size: 1.2rem;
-            margin: 1.5rem 0 0.8rem;
+            font-size: 1.5rem;
+            margin: 1.2rem 0;
+            color: #334155;
         }
         
         p {
@@ -174,161 +97,221 @@
             line-height: 1.7;
         }
         
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
         .card {
             background: white;
             border-radius: 10px;
-            padding: 1.8rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
         }
         
-        .warning, .danger, .success {
-            padding: 1.2rem;
-            margin: 1.5rem 0;
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .warning-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 5px solid #d97706;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 5px solid #2563eb;
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .simulator-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 900px) {
+            .simulator-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .controller {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .lcd-screen {
+            background: linear-gradient(135deg, #a8d5e5 0%, #88c1d0 100%);
+            color: #002b49;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1rem;
             border-radius: 8px;
-            border-left: 4px solid;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 2px rgba(168, 213, 229, 0.7);
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         
-        .warning {
-            background: var(--warning-bg);
-            border-left-color: var(--warning-border);
+        .lcd-line {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.4rem;
+            font-weight: bold;
         }
         
-        .danger {
-            background: var(--danger-bg);
-            border-left-color: var(--danger-border);
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.6rem;
         }
         
-        .success {
-            background: var(--success-bg);
-            border-left-color: var(--success-border);
+        .key {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 0.8rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 60px;
+        }
+        
+        .key:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        .function-key {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .start-key {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .stop-key {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        
+        .reset-key {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+        
+        .emergency-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .emergency-button {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+            border: 4px solid #7f1d1d;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .instructions {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
         
         .step {
             margin-bottom: 1.2rem;
-            padding: 1.2rem;
-            background: #f8fafc;
+            padding: 1rem;
             border-radius: 8px;
-            border-left: 4px solid var(--primary);
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
         
-        .step-number {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            width: 28px;
-            height: 28px;
-            text-align: center;
-            line-height: 28px;
-            border-radius: 50%;
-            margin-right: 10px;
-            font-weight: bold;
-            font-size: 0.9rem;
+        .active-step {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #2563eb;
         }
         
-        .config-table, .register-table {
+        .progress-container {
+            margin-top: 1.5rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .progress-bar {
+            height: 30px;
+            background: #e2e8f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 15px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        table {
             width: 100%;
             border-collapse: collapse;
             margin: 1.5rem 0;
             background: white;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
         
-        .config-table th, .config-table td,
-        .register-table th, .register-table td {
+        th, td {
             padding: 1rem;
             text-align: left;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #e2e8f0;
         }
         
-        .config-table th {
+        th {
             background: #f1f5f9;
             font-weight: 600;
         }
         
-        .register-table th {
-            background: var(--primary);
-            color: white;
-            font-weight: 600;
-        }
-        
-        .config-table tr:last-child td,
-        .register-table tr:last-child td {
+        tr:last-child td {
             border-bottom: none;
-        }
-        
-        .function-code {
-            font-family: 'Courier New', monospace;
-            background: #f1f5f9;
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-weight: 600;
-            color: var(--primary-dark);
-        }
-        
-        .tab-nav {
-            display: flex;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 1.5rem;
-        }
-        
-        .tab-button {
-            padding: 0.8rem 1.5rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            color: #64748b;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-        }
-        
-        .tab-button.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .chart-container {
-            height: 300px;
-            margin: 1.5rem 0;
-        }
-        
-        .print-btn {
-            background: var(--success-border);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            margin-top: 1rem;
-            transition: background 0.3s;
-        }
-        
-        .print-btn:hover {
-            background: #059669;
-        }
-        
-        .print-btn i {
-            margin-right: 0.5rem;
-        }
-        
-        .section-icon {
-            color: var(--primary);
-            margin-right: 0.5rem;
         }
         
         footer {
@@ -336,295 +319,443 @@
             padding: 2rem 0;
             margin-top: 3rem;
             color: #64748b;
-            border-top: 1px solid var(--border-color);
-            background: white;
-        }
-        
-        /* Mobile styles */
-        .mobile-menu-btn {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            z-index: 100;
-            background: white;
-            border: none;
-            border-radius: 5px;
-            padding: 0.5rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        @media (max-width: 968px) {
-            .flex-container {
-                flex-direction: column;
-            }
-            
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: fixed;
-                left: -100%;
-                top: 0;
-                z-index: 99;
-                height: 100vh;
-                transition: left 0.3s ease;
-                overflow-y: auto;
-            }
-            
-            .sidebar.open {
-                left: 0;
-            }
-            
-            .main-content {
-                margin-left: 0;
-                padding: 1rem;
-                padding-top: 4rem;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            .config-table, .register-table {
-                display: block;
-                overflow-x: auto;
-            }
-        }
-        
-        .two-columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
         }
         
         @media (max-width: 768px) {
-            .two-columns {
-                grid-template-columns: 1fr;
+            .nav-links {
+                display: none;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            section {
+                padding: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <button class="mobile-menu-btn" id="mobileMenuButton">
-        <i class="fas fa-bars"></i>
-    </button>
-
     <header>
         <div class="container">
-            <div class="header-content">
-                <div class="logo">Controlador de Dosificación</div>
-                <div>Guía Completa de Configuración y Operación</div>
-            </div>
+            <nav>
+                <div class="logo">Simulador de Dosificación</div>
+                <ul class="nav-links">
+                    <li><a href="#introduccion">Introducción</a></li>
+                    <li><a href="#seguridad">Seguridad</a></li>
+                    <li><a href="#interfaz">Interfaz</a></li>
+                    <li><a href="#simulador">Simulador</a></li>
+                    <li><a href="#alarmas">Alarmas</a></li>
+                    <li><a href="#guia">Guía Rápida</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
-    <div class="flex-container">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h1>Batching Master</h1>
-                <p>Guía de Configuración</p>
-            </div>
-            <nav>
-                <a href="#intro" class="sidebar-link active">
-                    <i class="fas fa-home"></i> Introducción
-                </a>
-                <a href="#seguridad" class="sidebar-link">
-                    <i class="fas fa-shield-alt"></i> Seguridad
-                </a>
-                <a href="#operacion" class="sidebar-link">
-                    <i class="fas fa-play-circle"></i> Operación Básica
-                </a>
-                <a href="#config_sensor" class="sidebar-link">
-                    <i class="fas fa-tachometer-alt"></i> Configurar Sensor
-                </a>
-                <a href="#config_corte" class="sidebar-link">
-                    <i class="fas fa-cut"></i> Puntos de Corte
-                </a>
-                <a href="#config_monitoreo" class="sidebar-link">
-                    <i class="fas fa-tv"></i> Monitoreo y Alarmas
-                </a>
-                <a href="#config_io" class="sidebar-link">
-                    <i class="fas fa-project-diagram"></i> Entradas/Salidas
-                </a>
-                <a href="#config_comm" class="sidebar-link">
-                    <i class="fas fa-network-wired"></i> Comunicación
-                </a>
-                <a href="#calibracion" class="sidebar-link">
-                    <i class="fas fa-tools"></i> Calibración y Pruebas
-                </a>
-                <a href="#errores" class="sidebar-link">
-                    <i class="fas fa-exclamation-triangle"></i> Solución de Errores
-                </a>
-                <a href="#registro" class="sidebar-link">
-                    <i class="fas fa-clipboard-check"></i> Registro de Configuración
-                </a>
-            </nav>
-        </aside>
+    <div class="container">
+        <section id="introduccion">
+            <h2>Manual de Operación Interactivo</h2>
+            <p>Este manual interactivo proporciona a los operadores las instrucciones para operar de forma segura y eficiente el controlador de dosificación industrial. El objetivo es estandarizar los procedimientos de operación, configuración básica y respuesta a alarmas a través de una experiencia práctica.</p>
+            <p>Este controlador industrial está diseñado para automatizar y supervisar procesos de dosificación, llenado y carga de líquidos. Permite preseleccionar una cantidad de producto y controla una válvula y una bomba para dosificar esa cantidad exacta, garantizando precisión y seguridad.</p>
+        </section>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Introduction Section -->
-            <section id="intro" class="content-section active">
-                <h1>Guía de Configuración - Controlador de Dosificación</h1>
-                
-                <div class="card">
-                    <p>Este documento proporciona el procedimiento completo para configurar los parámetros del controlador de dosificación según el manual técnico de referencia. El controlador está diseñado para operaciones de dosificación, llenado y carga de líquidos con alta precisión.</p>
-                    
-                    <div class="warning">
-                        <p><strong><i class="fas fa-exclamation-triangle"></i> Importante:</strong> Este procedimiento debe ser realizado solo por personal autorizado y capacitado. Siga siempre las normas de seguridad de su planta.</p>
-                    </div>
-                    
-                    <button class="print-btn" onclick="window.print()">
-                        <i class="fas fa-print"></i> Imprimir Procedimiento
-                    </button>
+        <section id="seguridad">
+            <h2>La Seguridad es lo Primero</h2>
+            <div class="card-grid">
+                <div class="card warning-card">
+                    <div class="card-icon">⚠️</div>
+                    <h3>¡ADVERTENCIA!</h3>
+                    <p>La operación incorrecta del equipo puede resultar en daños materiales o lesiones. Siga siempre los procedimientos de seguridad.</p>
                 </div>
+                
+                <div class="card info-card">
+                    <div class="card-icon">👤</div>
+                    <h3>Solo Personal Autorizado</h3>
+                    <p>Únicamente el personal capacitado y autorizado por el supervisor puede operar este equipo.</p>
+                </div>
+                
+                <div class="card info-card">
+                    <div class="card-icon">🛑</div>
+                    <h3>Interruptor de Emergencia (OFF)</h3>
+                    <p>El interruptor rojo es el paro de emergencia. Al presionarlo, el proceso se detiene inmediatamente.</p>
+                </div>
+                
+                <div class="card info-card">
+                    <div class="card-icon">🧪</div>
+                    <h3>Conozca su Proceso</h3>
+                    <p>Asegúrese de conocer el producto, los riesgos asociados y el procedimiento de emergencia de la planta.</p>
+                </div>
+            </div>
+        </section>
 
-                <div class="card">
-                    <h2>Estructura de la Guía</h2>
-                    <p>Esta guía está organizada en secciones temáticas para facilitar el acceso a la información:</p>
+        <section id="interfaz">
+            <h2>Conociendo la Interfaz del Operador</h2>
+            <p>Familiarícese con el panel frontal del controlador. <strong>Pase el cursor sobre cada botón</strong> para ver una descripción de su función.</p>
+            
+            <div class="controller">
+                <div class="lcd-screen">
+                    <div class="lcd-line">
+                        <span>Pres</span>
+                        <span>20000 kg</span>
+                    </div>
+                    <div class="lcd-line">
+                        <span>B</span>
+                        <span>2557 kg</span>
+                    </div>
+                </div>
+                
+                <div class="keypad">
+                    <button class="key" title="Ingresa el número 1">1</button>
+                    <button class="key" title="Ingresa el número 2">2</button>
+                    <button class="key" title="Ingresa el número 3">3</button>
+                    <button class="key function-key" title="Confirma la cantidad preseleccionada">Set</button>
+                    <button class="key start-key" title="Inicia o reanuda la dosificación">Start</button>
                     
-                    <div class="two-columns">
-                        <div>
-                            <h3><i class="fas fa-shield-alt section-icon"></i>Seguridad</h3>
-                            <p>Consideraciones críticas de seguridad antes de cualquier manipulación del equipo.</p>
-                            
-                            <h3><i class="fas fa-tachometer-alt section-icon"></i>Configuración del Sensor</h3>
-                            <p>Ajuste del rango de medición, unidades y calibración básica.</p>
-                            
-                            <h3><i class="fas fa-cut section-icon"></i>Puntos de Corte</h3>
-                            <p>Configuración de cortes digitales y analógicos para dosificación precisa.</p>
+                    <button class="key" title="Ingresa el número 4">4</button>
+                    <button class="key" title="Ingresa el número 5">5</button>
+                    <button class="key" title="Ingresa el número 6">6</button>
+                    <button class="key function-key" title="Tecla de función programable 1">F1</button>
+                    <button class="key stop-key" title="Pausa la dosificación">Stop</button>
+                    
+                    <button class="key" title="Ingresa el número 7">7</button>
+                    <button class="key" title="Ingresa el número 8">8</button>
+                    <button class="key" title="Ingresa el número 9">9</button>
+                    <button class="key function-key" title="Tecla de función programable 2">F2</button>
+                    <button class="key function-key" title="Tecla de función programable 3">F3</button>
+                    
+                    <button class="key reset-key" title="Reinicia para un nuevo lote o borra una alarma">RESET</button>
+                    <button class="key" title="Ingresa el número 0">0</button>
+                    <button class="key" title="Muestra el caudal actual">#</button>
+                    <button class="key function-key" title="Accede a los menús de configuración">Menu</button>
+                    <button class="key function-key" title="Control Remoto">RC</button>
+                </div>
+                
+                <div class="emergency-section">
+                    <div class="emergency-button" title="Interruptor de paro de emergencia">OFF</div>
+                    <span>Interruptor de Emergencia</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="simulador">
+            <h2>Simulador de Operación Estándar</h2>
+            <div class="simulator-container">
+                <div class="instructions">
+                    <h3>Siga las instrucciones para completar una dosificación:</h3>
+                    <div class="step active-step">
+                        <p><strong>Paso 1: Preparación para un Nuevo Lote.</strong></p>
+                        <p>Presione la tecla <strong>[RESET]</strong> para borrar los datos del lote anterior.</p>
+                    </div>
+                    <div class="step">
+                        <p><strong>Paso 2: Ingresar la Cantidad.</strong></p>
+                        <p>Use el teclado numérico para ingresar <strong>1500</strong> kg.</p>
+                    </div>
+                    <div class="step">
+                        <p><strong>Paso 3: Confirmar la Preselección.</strong></p>
+                        <p>Presione la tecla <strong>[Set]</strong> para confirmar.</p>
+                    </div>
+                    <div class="step">
+                        <p><strong>Paso 4: Iniciar la Dosificación.</strong></p>
+                        <p>Presione la tecla <strong>[Start]</strong> para comenzar.</p>
+                    </div>
+                    <div class="step">
+                        <p><strong>Paso 5: Proceso en curso.</strong></p>
+                        <p>La dosificación se completará automáticamente. Puede pausar con <strong>[Stop]</strong>.</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3>Panel de Simulación</h3>
+                    <div class="controller">
+                        <div class="lcd-screen">
+                            <div class="lcd-line">
+                                <span>Pres</span>
+                                <span id="preset-value">20000 kg</span>
+                            </div>
+                            <div class="lcd-line">
+                                <span>B</span>
+                                <span id="batch-value">2557 kg</span>
+                            </div>
                         </div>
                         
-                        <div>
-                            <h3><i class="fas fa-project-diagram section-icon"></i>Entradas/Salidas</h3>
-                            <p>Configuración de E/S digitales y asignación de funciones.</p>
+                        <div class="keypad">
+                            <button class="key" onclick="pressKey('1')">1</button>
+                            <button class="key" onclick="pressKey('2')">2</button>
+                            <button class="key" onclick="pressKey('3')">3</button>
+                            <button class="key function-key" onclick="pressKey('Set')">Set</button>
+                            <button class="key start-key" onclick="pressKey('Start')">Start</button>
                             
-                            <h3><i class="fas fa-network-wired section-icon"></i>Comunicación</h3>
-                            <p>Configuración de interfaces y protocolos de comunicación.</p>
+                            <button class="key" onclick="pressKey('4')">4</button>
+                            <button class="key" onclick="pressKey('5')">5</button>
+                            <button class="key" onclick="pressKey('6')">6</button>
+                            <button class="key function-key" onclick="pressKey('F1')">F1</button>
+                            <button class="key stop-key" onclick="pressKey('Stop')">Stop</button>
                             
-                            <h3><i class="fas fa-exclamation-triangle section-icon"></i>Solución de Errores</h3>
-                            <p>Diagnóstico y solución de problemas comunes.</p>
+                            <button class="key" onclick="pressKey('7')">7</button>
+                            <button class="key" onclick="pressKey('8')">8</button>
+                            <button class="key" onclick="pressKey('9')">9</button>
+                            <button class="key function-key" onclick="pressKey('F2')">F2</button>
+                            <button class="key function-key" onclick="pressKey('F3')">F3</button>
+                            
+                            <button class="key reset-key" onclick="pressKey('RESET')">RESET</button>
+                            <button class="key" onclick="pressKey('0')">0</button>
+                            <button class="key" onclick="pressKey('#')">#</button>
+                            <button class="key function-key" onclick="pressKey('Menu')">Menu</button>
+                            <button class="key function-key" onclick="pressKey('RC')">RC</button>
+                        </div>
+                        
+                        <div class="emergency-section">
+                            <div class="emergency-button" onclick="emergencyStop()">OFF</div>
+                            <span>Interruptor de Emergencia</span>
                         </div>
                     </div>
-                </div>
-            </section>
-
-            <!-- Safety Section -->
-            <section id="seguridad" class="content-section">
-                <h1>Consideraciones de Seguridad</h1>
-                
-                <div class="card">
-                    <p>La seguridad es la máxima prioridad. Antes de realizar cualquier configuración o mantenimiento, asegúrese de cumplir con los siguientes puntos críticos para garantizar una operación segura para el personal y el equipo.</p>
                     
-                    <div class="danger">
-                        <p class="font-bold"><i class="fas fa-skull-crossbones"></i> Peligro</p>
-                        <ul>
-                            <li><strong>Personal Autorizado:</strong> Solo ingenieros o electricistas calificados y autorizados deben instalar y configurar el dispositivo.</li>
-                            <li><strong>Equipo de Protección:</strong> Utilice siempre el equipo de protección personal adecuado según las normativas de su planta.</li>
-                            <li><strong>Desconexión Eléctrica:</strong> Asegúrese de que el equipo esté desconectado de la fuente de alimentación antes de manipular el cableado.</li>
-                            <li><strong>Parada de Emergencia:</strong> Familiarícese con la ubicación y el funcionamiento del interruptor de parada de emergencia.</li>
-                        </ul>
+                    <div class="progress-container">
+                        <h4>Progreso de Dosificación</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <p id="progress-text">Preparado para comenzar</p>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="card">
-                    <h2><i class="fas fa-exclamation-triangle section-icon"></i>Procedimientos Seguros</h2>
-                    <ul>
-                        <li>Solo personal autorizado puede realizar la configuración</li>
-                        <li>Verifique que el equipo esté desconectado antes de cualquier manipulación</li>
-                        <li>Siga siempre los procedimientos de seguridad de la planta</li>
-                        <li>Utilice el equipo de protección personal requerido</li>
-                        <li>Mantenga el área de trabajo limpia y organizada</li>
-                        <li>Realice pruebas de seguridad después de cualquier modificación</li>
-                    </ul>
-                </div>
-            </section>
+        <section id="alarmas">
+            <h2>Guía de Alarmas y Mensajes de Error</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mensaje en Pantalla</th>
+                        <th>Significado</th>
+                        <th>Acción Requerida</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ERR OFF active</td>
+                        <td>Se presionó el interruptor de paro de emergencia OFF.</td>
+                        <td>1. Asegúrese de que la condición de emergencia esté resuelta.<br>2. Gire y libere el interruptor OFF.<br>3. Presione [Reset] para borrar la alarma.</td>
+                    </tr>
+                    <tr>
+                        <td>ERR MIN FLOW</td>
+                        <td>El caudal es más bajo de lo esperado.</td>
+                        <td>1. El proceso se detiene.<br>2. Verifique si hay obstrucciones, si la bomba funciona o si el tanque de suministro está vacío.<br>3. Solucione la causa y presione [Reset].</td>
+                    </tr>
+                    <tr>
+                        <td>ERR S.-Break NK1</td>
+                        <td>Falla en el sensor de flujo (rotura de cable).</td>
+                        <td>1. El proceso se detiene.<br>2. Notifique inmediatamente a Mantenimiento.<br>3. No intente continuar hasta que sea reparado.</td>
+                    </tr>
+                    <tr>
+                        <td>ERR.NO GROUNDING</td>
+                        <td>La conexión a tierra no está detectada.</td>
+                        <td>1. Verifique que la pinza de puesta a tierra esté conectada correctamente.<br>2. Una vez corregido, presione [Reset].</td>
+                    </tr>
+                    <tr>
+                        <td>Pres. too less / great</td>
+                        <td>La cantidad preseleccionada está fuera de los límites.</td>
+                        <td>1. Presione [Reset].<br>2. Ingrese una cantidad válida dentro del rango permitido.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
 
-            <!-- Additional sections would follow the same structure -->
-            <!-- For brevity, I'm including just two sections but the complete code would have all sections -->
-
-            <section id="operacion" class="content-section">
-                <h1>Puesta en Marcha y Operación Básica</h1>
-                <!-- Content from the original documents -->
-            </section>
-
-            <section id="config_sensor" class="content-section">
-                <h1>Configuración del Sensor y Rango</h1>
-                <!-- Content from the original documents -->
-            </section>
-
-            <!-- Additional sections continue here -->
-
-            <footer>
-                <div class="container">
-                    <p>Guía de Configuración - Controlador de Dosificación</p>
-                    <p>Documentación Técnica para uso interno</p>
-                </div>
-            </footer>
-        </main>
+        <section id="guia">
+            <h2>Guía Rápida de Operación</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Para...</th>
+                        <th>Presione la(s) Tecla(s)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Iniciar un nuevo lote</strong></td>
+                        <td>[Reset] → [Ingresar Cantidad] → [Set] → [Start]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pausar la dosificación</strong></td>
+                        <td>[Stop]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reanudar la dosificación</strong></td>
+                        <td>[Start]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cancelar un lote pausado</strong></td>
+                        <td>[Reset]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ver el caudal actual</strong></td>
+                        <td>[#]</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Paro de Emergencia</strong></td>
+                        <td>Presionar el interruptor rojo OFF</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Borrar una alarma</strong></td>
+                        <td>Solucionar la causa y presionar [Reset]</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
     </div>
 
+    <footer>
+        <div class="container">
+            <p>Simulador de Capacitación para Controladores de Dosificación | Creado con fines educativos</p>
+        </div>
+    </footer>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebar = document.getElementById('sidebar');
-            const mobileMenuButton = document.getElementById('mobileMenuButton');
-            const sidebarLinks = document.querySelectorAll('.sidebar-link');
-            const contentSections = document.querySelectorAll('.content-section');
-            
-            // Mobile menu toggle
-            mobileMenuButton.addEventListener('click', () => {
-                sidebar.classList.toggle('open');
-            });
-            
-            // Update content based on hash
-            function updateContent(hash) {
-                const targetHash = hash || '#intro';
+        // Estado del simulador
+        const simulatorState = {
+            currentStep: 1,
+            presetValue: '20000',
+            batchedValue: '2557',
+            isBatching: false,
+            targetPreset: '1500',
+            batchInterval: null
+        };
+
+        // Elementos de la interfaz
+        const presetElement = document.getElementById('preset-value');
+        const batchElement = document.getElementById('batch-value');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        const steps = document.querySelectorAll('.step');
+
+        // Función para presionar una tecla
+        function pressKey(key) {
+            if (key === 'RESET') {
+                resetSimulator();
+                updateStep(1);
+            } else if (key === 'Set' && simulatorState.currentStep === 2) {
+                if (simulatorState.presetValue === simulatorState.targetPreset) {
+                    updateStep(3);
+                }
+            } else if (key === 'Start' && simulatorState.currentStep === 3) {
+                startBatching();
+                updateStep(4);
+            } else if (key === 'Stop' && simulatorState.isBatching) {
+                stopBatching();
+            } else if (!isNaN(key) && simulatorState.currentStep === 1) {
+                // Solo aceptar entrada numérica en el paso 2
+                if (simulatorState.presetValue === '20000') {
+                    simulatorState.presetValue = '';
+                }
+                simulatorState.presetValue += key;
+                if (simulatorState.presetValue.length > 4) {
+                    simulatorState.presetValue = simulatorState.presetValue.slice(0, 4);
+                }
+                presetElement.textContent = simulatorState.presetValue + ' kg';
                 
-                // Update sidebar links
-                sidebarLinks.forEach(link => {
-                    link.classList.toggle('active', link.getAttribute('href') === targetHash);
-                });
-                
-                // Update content sections
-                contentSections.forEach(section => {
-                    section.classList.toggle('active', section.id === targetHash.substring(1));
-                });
+                // Si el usuario ingresa el valor objetivo, avanzar automáticamente
+                if (simulatorState.presetValue === simulatorState.targetPreset) {
+                    updateStep(2);
+                }
             }
             
-            // Handle sidebar link clicks
-            sidebarLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetHash = this.getAttribute('href');
-                    history.pushState(null, null, targetHash);
-                    updateContent(targetHash);
-                    
-                    // Close mobile sidebar after selection
-                    if (sidebar.classList.contains('open')) {
-                        sidebar.classList.remove('open');
-                    }
-                });
-            });
-            
-            // Handle browser back/forward buttons
-            window.addEventListener('popstate', () => {
-                updateContent(window.location.hash);
-            });
-            
-            // Initial content update
-            updateContent(window.location.hash);
-            
-            // Print functionality
-            const printBtn = document.querySelector('.print-btn');
-            if (printBtn) {
-                printBtn.addEventListener('click', function() {
-                    setTimeout(function() {
-                        window.print();
-                    }, 500);
-                });
+            updateDisplay();
+        }
+
+        // Función de paro de emergencia
+        function emergencyStop() {
+            if (simulatorState.isBatching) {
+                stopBatching();
+                progressText.textContent = 'PARO DE EMERGENCIA ACTIVADO';
+                progressText.style.color = '#dc2626';
             }
-        });
+        }
+
+        // Función para iniciar el proceso de dosificación
+        function startBatching() {
+            simulatorState.isBatching = true;
+            let progress = 0;
+            const target = parseInt(simulatorState.targetPreset);
+            
+            simulatorState.batchInterval = setInterval(() => {
+                progress += 2;
+                if (progress > 100) progress = 100;
+                
+                progressFill.style.width = progress + '%';
+                const currentValue = Math.round(target * progress / 100);
+                simulatorState.batchedValue = currentValue.toString();
+                batchElement.textContent = simulatorState.batchedValue + ' kg';
+                
+                if (progress < 50) {
+                    progressText.textContent = 'Dosificación en progreso...';
+                } else if (progress < 100) {
+                    progressText.textContent = 'Dosificación a mitad de camino';
+                } else {
+                    progressText.textContent = '¡Dosificación completada!';
+                    clearInterval(simulatorState.batchInterval);
+                    simulatorState.isBatching = false;
+                    updateStep(5);
+                }
+                
+                updateDisplay();
+            }, 100);
+        }
+
+        // Función para detener la dosificación
+        function stopBatching() {
+            if (simulatorState.batchInterval) {
+                clearInterval(simulatorState.batchInterval);
+                simulatorState.isBatching = false;
+                progressText.textContent = 'Dosificación pausada. Presione Start para continuar.';
+            }
+        }
+
+        // Función para reiniciar el simulador
+        function resetSimulator() {
+            if (simulatorState.batchInterval) {
+                clearInterval(simulatorState.batchInterval);
+            }
+            
+            simulatorState.currentStep = 1;
+            simulatorState.presetValue = '20000';
+            simulatorState.batchedValue = '2557';
+            simulatorState.isBatching = false;
+            
+            progressFill.style.width = '0%';
+            progressText.textContent = 'Preparado para comenzar';
+            progressText.style.color = '';
+            
+            updateDisplay();
+            updateStep(1);
+        }
+
+        // Función para actualizar la visualización
+        function updateDisplay() {
+            presetElement.textContent = simulatorState.presetValue + ' kg';
+            batchElement.textContent = simulatorState.batchedValue + ' kg';
+        }
+
+        // Función para actualizar el paso actual
+        function updateStep(stepNumber) {
+            simulatorState.currentStep = stepNumber;
+            
+            // Actualizar la visualización de los pasos
+            steps.forEach((step, index) => {
+                if (index === stepNumber - 1) {
+                    step.classList.add('active-step');
+                } else {
+                    step.classList.remove('active-step');
+                }
+            });
+        }
+
+        // Inicializar el simulador
+        updateDisplay();
     </script>
 </body>
 </html>
