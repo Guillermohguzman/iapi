@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Sistemas de Venteo - Pintolux</title>
+    <style>
+        /* Sistema de diseño completo sin dependencias externas */
+        :root {
+            --color-primary: #0d9488;
+            --color-primary-dark: #0f766e;
+            --color-primary-light: #2dd4bf;
+            --color-secondary: #f59e0b;
+            --color-secondary-dark: #d97706;
+            --color-danger: #dc2626;
+            --color-success: #16a34a;
+            --color-warning: #ea580c;
+            --color-gray-50: #fafafa;
+            --color-gray-100: #f4f4f5;
+            --color-gray-200: #e4e4e7;
+            --color-gray-300: #d4d4d8;
+            --color-gray-400: #a1a1aa;
+            --color-gray-500: #71717a;
+            --color-gray-600: #52525b;
+            --color-gray-700: #3f3f46;
+            --color-gray-800: #27272a;
+            --color-gray-900: #18181b;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 0.375rem;
+            --radius-lg: 0.5rem;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--color-gray-100);
+            color: var(--color-gray-800);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-primary-dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--color-primary-light);
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: 1fr;
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .alert {
+            background-color: #fffbeb;
+            border-left: 4px solid var(--color-secondary);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-title {
+            color: var(--color-secondary-dark);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            border: 1px solid;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .btn:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.3);
+        }
+
+        .btn-active {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .btn-inactive {
+            background-color: white;
+            color: var(--color-gray-600);
+            border-color: var(--color-gray-300);
+        }
+
+        .btn-inactive:hover {
+            background-color: var(--color-gray-50);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-gray-200);
+        }
+
+        th {
+            background-color: var(--color-gray-50);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--color-gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        tbody tr:hover {
+            background-color: var(--color-gray-50);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin-bottom: 1.5rem;
+        }
+
+        .katex-display {
+            display: block;
+            text-align: center;
+            font-size: 1.1em;
+            margin: 1em 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0.5rem 0;
+        }
+
+        .katex {
+            font-size: 1em;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-gray-800);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .normative-table {
+            font-size: 0.875rem;
+        }
+
+        .normative-table th {
+            background-color: var(--color-primary-light);
+            color: var(--color-primary-dark);
+        }
+
+        footer {
+            background-color: var(--color-gray-800);
+            color: white;
+            margin-top: 3rem;
+            padding: 1.5rem 0;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        .maintenance-table th, .maintenance-table td {
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .recommendations-table th {
+            background-color: var(--color-primary-light);
+        }
+
+        .factor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .factor-item {
+            background-color: var(--color-gray-50);
+            padding: 1rem;
+            border-radius: var(--radius);
+            border-left: 3px solid var(--color-primary);
+        }
+
+        .factor-item h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-primary-dark);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: var(--radius);
+            margin-right: 0.5rem;
+        }
+
+        .badge-primary {
+            background-color: var(--color-primary-light);
+            color: var(--color-primary-dark);
+        }
+
+        .badge-secondary {
+            background-color: #fed7aa;
+            color: var(--color-secondary-dark);
+        }
+
+        .badge-danger {
+            background-color: #fecaca;
+            color: var(--color-danger);
+        }
+
+        .formula-box {
+            background-color: var(--color-gray-50);
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .formula-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-primary-dark);
+        }
+
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .md\:grid-cols-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Análisis de Sistemas de Venteo para Tanques Atmosféricos</h1>
+            <p class="header-subtitle">Cliente: Pintolux, S.A. de C.V. | Planta: Azcapotzalco, CDMX | Documento N°: IT-VENT-API2000-001</p>
+            <p class="header-subtitle">Estudio realizado conforme al estándar API 2000, 7ª Edición (ISO 28300)</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="resumen" class="section">
+            <h2 class="section-title">Resumen Ejecutivo</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="card">
+                    <h3 class="card-title">Venteo Normal</h3>
+                    <p>Caudales operativos requeridos varían entre <strong>20.63 y 75.64 Nm³/h</strong>.</p>
+                </div>
+                <div class="card">
+                    <h3 class="card-title">Venteo de Emergencia</h3>
+                    <p>Caudales por incendio, el caso dominante, oscilan entre <strong>4,070 y 8,995 Nm³/h</strong>.</p>
+                </div>
+                <div class="alert">
+                    <h3 class="alert-title">Acción Requerida</h3>
+                    <p>Utilizar este análisis como base técnica oficial para la adquisición de equipos de venteo y arrestadores de flama conforme a API 2000 y NOM aplicables.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 class="card-title">Objetivo del Estudio</h3>
+                <p>Este informe detalla el análisis de ingeniería para el dimensionamiento de los sistemas de venteo de los tanques TIA 10, 11, 13 y 14. El estudio se llevó a cabo en estricto cumplimiento con el estándar global API 2000, 7ª Edición (ISO 28300). Su propósito es establecer la base técnica necesaria para asegurar la integridad estructural de los activos, la seguridad del personal y el cumplimiento regulatorio de Pintolux con la legislación mexicana vigente.</p>
+                
+                <h3 class="card-title" style="margin-top: 1.5rem;">Justificación Técnica del Venteo</h3>
+                <p>Los tanques atmosféricos son vulnerables a fallas estructurales sin un sistema de venteo adecuado. El venteo previene dos modos de falla catastróficos:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="card">
+                        <h4>Colapso por Vacío</h4>
+                        <p>El vaciado del tanque o un enfriamiento súbito del contenido pueden generar presión negativa. Esta presión puede deformar o colapsar la estructura del tanque.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Ruptura por Sobrepresión</h4>
+                        <p>El llenado, el calentamiento del producto almacenado o un incendio externo pueden generar una presión excesiva dentro del tanque, lo que puede causar su ruptura.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="selector" class="section">
+            <h2 class="section-title">Panel de Control por Activo</h2>
+            <p>Seleccione un tanque para visualizar sus datos de diseño, resultados de cálculo y especificaciones de equipo recomendadas.</p>
+            <div id="tank-selector-container" class="btn-group"></div>
+        </section>
+
+        <div id="dashboard-content">
+            <section id="datos-diseno" class="section">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="card">
+                        <h3 class="card-title">Datos de Diseño: <span id="tank-title-1"></span></h3>
+                        <table>
+                            <tbody id="design-data-table"></tbody>
+                        </table>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Requerimientos de Venteo: <span id="tank-title-2"></span></h3>
+                        <div class="chart-container">
+                            <canvas id="individualTankChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="calculos" class="section">
+                <h2 class="section-title">Memoria de Cálculo Detallada</h2>
+                <p>Esta sección muestra las ecuaciones y el desarrollo numérico específico para el tanque seleccionado, proporcionando una trazabilidad completa de los resultados.</p>
+                <div id="calculation-details" class="card"></div>
+            </section>
+
+            <section id="comparativa" class="section">
+                <h2 class="section-title">Análisis Comparativo General</h2>
+                <p>El siguiente gráfico compara los requerimientos de venteo para todos los tanques, permitiendo identificar rápidamente los activos con las mayores demandas de alivio de presión y emergencia.</p>
+                <div class="card">
+                    <div class="chart-container" style="height: 400px;">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="recomendaciones" class="section">
+                <h2 class="section-title">Especificaciones y Recomendaciones</h2>
+                <p>A continuación se presenta una guía para la selección de equipos basada en los caudales calculados y las presiones de diseño recomendadas para los tanques.</p>
+                <div class="card">
+                    <table class="recommendations-table">
+                        <thead>
+                            <tr>
+                                <th>Servicio</th>
+                                <th>Caudal Requerido (Nm³/h)</th>
+                                <th>Ajuste (mbar)</th>
+                                <th>Diámetro Conexión (pulg)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recommendations-table"></tbody>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Modelos de Válvulas Recomendados</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <h4>Válvulas de Presión/Vacío</h4>
+                            <ul style="list-style-type: disc; margin-left: 1.5rem;">
+                                <li>Protectoseal 8540</li>
+                                <li>Groth 1200A</li>
+                                <li>Shand & Jurs 94100</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Venteos de Emergencia</h4>
+                            <ul style="list-style-type: disc; margin-left: 1.5rem;">
+                                <li>Groth 2100</li>
+                                <li>Protectoseal 7800</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="mt-4"><strong>Nota:</strong> Se recomienda la instalación de arrestadores de flama certificados bajo la norma ISO 16852 para tanques que contengan productos volátiles (TIA 10, 13, 14).</p>
+                </div>
+            </section>
+            
+            <section id="mantenimiento" class="section">
+                <h2 class="section-title">Plan de Mantenimiento Recomendado</h2>
+                <p>La seguridad funcional de los tanques es una responsabilidad continua que trasciende la instalación inicial de los dispositivos de venteo.</p>
+                <div class="card">
+                    <table class="maintenance-table">
+                        <thead>
+                            <tr>
+                                <th>Dispositivo</th>
+                                <th>Frecuencia</th>
+                                <th>Actividades</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Válvulas de Presión/Vacío</td>
+                                <td>Semestral</td>
+                                <td>Inspección visual, limpieza profunda y verificación del correcto funcionamiento de apertura y cierre.</td>
+                            </tr>
+                            <tr>
+                                <td>Venteos de Emergencia</td>
+                                <td>Anual</td>
+                                <td>Inspección visual detallada, limpieza de componentes y verificación de la integridad de los sellos.</td>
+                            </tr>
+                            <tr>
+                                <td>Arrestadores de flama</td>
+                                <td>Trimestral</td>
+                                <td>Inspección visual, limpieza minuciosa de los elementos internos y confirmación de su integridad estructural.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section id="factores" class="section">
+                <h2 class="section-title">Factores que Influyen en el Venteo</h2>
+                <p>Comprender los factores que afectan los requerimientos de venteo es esencial para la operación segura y eficiente de los tanques.</p>
+                <div class="factor-grid">
+                    <div class="factor-item">
+                        <h4>Temperatura Ambiente</h4>
+                        <p>Las fluctuaciones extremas de temperatura elevan la presión interna del tanque, lo que incrementa los requerimientos de venteo.</p>
+                    </div>
+                    <div class="factor-item">
+                        <h4>Volatilidad del Producto</h4>
+                        <p>Los productos con baja presión de vapor generan más vapores, lo que exige mayores capacidades de venteo.</p>
+                    </div>
+                    <div class="factor-item">
+                        <h4>Caudales de Operación</h4>
+                        <p>Los incrementos en los caudales de llenado o vaciado del tanque aumentan directamente la necesidad de venteo normal.</p>
+                    </div>
+                    <div class="factor-item">
+                        <h4>Radiación Solar</h4>
+                        <p>La exposición directa a la radiación solar eleva la temperatura del producto y, consecuentemente, la tasa de vaporización.</p>
+                    </div>
+                    <div class="factor-item">
+                        <h4>Color del Tanque</h4>
+                        <p>Los tanques de colores oscuros absorben más calor, lo que provoca una mayor expansión térmica y una mayor demanda de venteo.</p>
+                    </div>
+                </div>
+                <div class="alert mt-4">
+                    <p><strong>Consideración Operativa Crucial:</strong> Cualquier modificación en las condiciones operativas o en el tipo de producto almacenado requiere una evaluación detallada de su impacto en los requerimientos de venteo.</p>
+                </div>
+            </section>
+            
+            <section id="normativa" class="section">
+                <h2 class="section-title">Marco Normativo y Obligaciones Legales</h2>
+                <p>El diseño y la operación de los sistemas de venteo se rigen por estándares y normativas. Su cumplimiento es esencial para la seguridad y la legalidad de las instalaciones.</p>
+                
+                <div class="card">
+                    <h3 class="card-title">Normativa Aplicable</h3>
+                    <table class="normative-table">
+                        <thead>
+                            <tr>
+                                <th>Estándar/Norma</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>API 2000 / ISO 28300</td>
+                                <td>Establece la metodología de cálculo para el venteo normal y de emergencia</td>
+                            </tr>
+                            <tr>
+                                <td>API 650</td>
+                                <td>Define los requisitos para tanques de acero, incluyendo techos frangibles</td>
+                            </tr>
+                            <tr>
+                                <td>ISO 16852</td>
+                                <td>Establece los requisitos para arrestadores de flama</td>
+                            </tr>
+                            <tr>
+                                <td>NOM-002-STPS-2010</td>
+                                <td>Exige medidas de prevención de incendios (venteos de emergencia obligatorios)</td>
+                            </tr>
+                            <tr>
+                                <td>NOM-020-STPS-2011</td>
+                                <td>Clasifica los venteos como accesorios de seguridad y exige su mantenimiento</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h3 class="card-title">Obligaciones Legales de Pintolux</h3>
+                    <p>En su rol de propietario y operador de los tanques, Pintolux debe cumplir con las siguientes obligaciones legales:</p>
+                    <ul style="list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem;">
+                        <li>Instalar y mantener sistemas de venteo adecuados, conforme a los cálculos presentados</li>
+                        <li>Realizar inspecciones periódicas de los dispositivos de venteo y documentarlas</li>
+                        <li>Mantener registros de mantenimiento y pruebas de los sistemas de venteo</li>
+                        <li>Capacitar al personal en la operación segura de los tanques y sus sistemas de venteo</li>
+                        <li>Actualizar los cálculos y dispositivos ante cambios en las condiciones operativas</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section id="pasos" class="section">
+                <h2 class="section-title">Próximos Pasos para Implementación</h2>
+                <p>Una vez determinados los caudales necesarios, es crucial seguir un proceso estructurado para la correcta selección, adquisición e instalación de los dispositivos de venteo.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="card">
+                        <h3 class="card-title">1. Validación de Presiones Operativas</h3>
+                        <p>Confirme las presiones máximas de trabajo permisibles (MAWP) y las presiones mínimas de vacío permisibles (MAWV) de cada tanque, consultando la documentación original.</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">2. Revisión de Curvas de Capacidad</h3>
+                        <p>Exija a los proveedores la presentación de curvas de flujo certificadas que demuestren que los dispositivos cumplen con los caudales requeridos.</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">3. Gestión de Cambios (MOC)</h3>
+                        <p>Documente formalmente cada nueva instalación o modificación mediante un proceso de Gestión de Cambios para mantener actualizados los registros de seguridad.</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">4. Adquisición e Implementación</h3>
+                        <p>Proceda con la compra de los dispositivos aprobados y realice la instalación siguiendo los procedimientos técnicos y de seguridad establecidos.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Informe Técnico para Pintolux, S.A. de C.V. - Análisis de Sistemas de Venteo conforme a API 2000</p>
+            <p>Documento N°: IT-VENT-API2000-001 | Fecha de Emisión: 2 de septiembre de 2025 | Revisión: G (Final con Memoria de Cálculo)</p>
+        </div>
+    </footer>
+
+    <script>
+        // Implementación de un sistema de gráficos simple sin dependencias externas
+        class SimpleChart {
+            constructor(ctx) {
+                this.ctx = ctx;
+                this.config = {};
+            }
+            
+            init(type, data, options) {
+                this.config = { type, data, options: options || {} };
+                this.render();
+                return this;
+            }
+            
+            update() {
+                this.render();
+            }
+            
+            render() {
+                const { type, data, options } = this.config;
+                const canvas = this.ctx.canvas;
+                const width = canvas.width;
+                const height = canvas.height;
+                
+                // Limpiar canvas
+                this.ctx.clearRect(0, 0, width, height);
+                
+                if (type === 'bar') {
+                    this.renderBarChart(data, options, width, height);
+                }
+            }
+            
+            renderBarChart(data, options, width, height) {
+                const { datasets, labels } = data;
+                const datasetCount = datasets.length;
+                const labelCount = labels.length;
+                
+                // Calcular dimensiones
+                const padding = 40;
+                const chartWidth = width - padding * 2;
+                const chartHeight = height - padding * 2;
+                const barWidth = (chartWidth / labelCount) * 0.7;
+                const groupWidth = chartWidth / labelCount;
+                const maxValue = this.getMaxValue(datasets);
+                
+                // Dibujar ejes
+                this.ctx.beginPath();
+                this.ctx.strokeStyle = '#d4d4d8';
+                this.ctx.lineWidth = 1;
+                
+                // Eje Y
+                this.ctx.moveTo(padding, padding);
+                this.ctx.lineTo(padding, height - padding);
+                
+                // Eje X
+                this.ctx.moveTo(padding, height - padding);
+                this.ctx.lineTo(width - padding, height - padding);
+                this.ctx.stroke();
+                
+                // Dibujar marcas en eje Y
+                this.ctx.textAlign = 'right';
+                this.ctx.textBaseline = 'middle';
+                this.ctx.fillStyle = '#52525b';
+                this.ctx.font = '12px sans-serif';
+                
+                const yStep = maxValue / 5;
+                for (let i = 0; i <= 5; i++) {
+                    const value = i * yStep;
+                    const y = height - padding - (value / maxValue) * chartHeight;
+                    
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(padding - 5, y);
+                    this.ctx.lineTo(padding, y);
+                    this.ctx.stroke();
+                    
+                    this.ctx.fillText(value.toFixed(0), padding - 10, y);
+                }
+                
+                // Dibujar barras
+                const colors = ['#3b82f6', '#f97316', '#dc2626'];
+                
+                for (let i = 0; i < labelCount; i++) {
+                    const x = padding + i * groupWidth + (groupWidth - barWidth * datasetCount) / 2;
+                    
+                    for (let j = 0; j < datasetCount; j++) {
+                        const value = datasets[j].data[i];
+                        const barHeight = (value / maxValue) * chartHeight;
+                        const barX = x + j * barWidth;
+                        const barY = height - padding - barHeight;
+                        
+                        this.ctx.fillStyle = colors[j % colors.length];
+                        this.ctx.fillRect(barX, barY, barWidth - 2, barHeight);
+                        
+                        // Etiqueta de valor
+                        if (value > maxValue * 0.05) {
+                            this.ctx.fillStyle = '#fff';
+                            this.ctx.textAlign = 'center';
+                            this.ctx.textBaseline = 'bottom';
+                            this.ctx.font = '10px sans-serif';
+                            this.ctx.fillText(value.toFixed(0), barX + barWidth/2, barY - 2);
+                        }
+                    }
+                    
+                    // Etiqueta del eje X
+                    this.ctx.fillStyle = '#52525b';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.textBaseline = 'top';
+                    this.ctx.font = '12px sans-serif';
+                    this.ctx.fillText(labels[i], padding + i * groupWidth + groupWidth/2, height - padding + 5);
+                }
+                
+                // Leyenda
+                this.ctx.textAlign = 'left';
+                this.ctx.textBaseline = 'middle';
+                this.ctx.font = '12px sans-serif';
+                
+                const legendX = width - 150;
+                const legendY = padding;
+                
+                for (let j = 0; j < datasetCount; j++) {
+                    this.ctx.fillStyle = colors[j % colors.length];
+                    this.ctx.fillRect(legendX, legendY + j * 20, 15, 15);
+                    
+                    this.ctx.fillStyle = '#52525b';
+                    this.ctx.fillText(datasets[j].label, legendX + 20, legendY + j * 20 + 7.5);
+                }
+            }
+            
+            getMaxValue(datasets) {
+                let max = 0;
+                for (const dataset of datasets) {
+                    for (const value of dataset.data) {
+                        if (value > max) max = value;
+                    }
+                }
+                return max * 1.1; // Añadir 10% de espacio
+            }
+            
+            data(newData) {
+                if (newData) this.config.data = newData;
+                return this.config.data;
+            }
+            
+            options(newOptions) {
+                if (newOptions) this.config.options = newOptions;
+                return this.config.options;
+            }
+        }
+
+        // Datos de los tanques
+        const tanqueData = {
+            'TIA-10': {
+                title: 'TIA-10 (Tolueno)',
+                designData: {
+                    'Servicio / Fluido': 'Tolueno',
+                    'Volumen Total (Vtk)': '14 m³',
+                    'Diámetro (D)': '2.30 m',
+                    'Altura (H)': '3.60 m',
+                    'Punto de Inflamación': '4 °C (Volátil)',
+                    'Caudal Llenado (Vpf)': '20 m³/h',
+                    'Caudal Vaciado (Vpe)': '30 m³/h',
+                },
+                results: {
+                    pressure: 43.44,
+                    vacuum: 71.23,
+                    emergency: 7026
+                },
+                calculations: `
+                    <h4 class="formula-title">Venteo Normal – Presión (Out-breathing)</h4>
+                    <p>El Tolueno es un líquido volátil (Punto de Inflamación < 37.8°C), por lo que se aplica un factor de seguridad de 2.0 al caudal de llenado.</p>
+                    <div class="formula-box">
+                        <div>V<sub>Total,Out</sub> = (Factor<sub>volatilidad</sub> × V<sub>pf</sub>) + (Y × V<sub>tk</sub><sup>0.9</sup>)</div>
+                        <div>V<sub>Total,Out</sub> = (2.0 × 20) + (0.32 × 14<sup>0.9</sup>)</div>
+                        <div>V<sub>Total,Out</sub> = 40 + 3.44 = <strong>43.44 Nm³/h</strong></div>
+                    </div>
+                    
+                    <h4 class="formula-title">Venteo Normal – Vacío (In-breathing)</h4>
+                    <div class="formula-box">
+                        <div>V<sub>Total,In</sub> = V<sub>pe</sub> + (C × V<sub>tk</sub><sup>0.7</sup>)</div>
+                        <div>V<sub>Total,In</sub> = 30 + (6.5 × 14<sup>0.7</sup>)</div>
+                        <div>V<sub>Total,In</sub> = 30 + 41.23 = <strong>71.23 Nm³/h</strong></div>
+                    </div>
+
+                    <h4 class="formula-title">Venteo de Emergencia por Fuego</h4>
+                    <p>Primero, se calcula el área de transferencia de calor expuesta al fuego (Área Inundada, A<sub>TWS</sub>).</p>
+                    <div class="formula-box">
+                        <div>A<sub>TWS</sub> = π × D × H = π × 2.30 × 3.60 = <strong>26.01 m²</strong></div>
+                    </div>
+                    <p>Luego, con esta área, se calcula el caudal de emergencia.</p>
+                    <div class="formula-box">
+                        <div>q = 208.2 × F × A<sub>TWS</sub><sup>0.82</sup> = 208.2 × 1.0 × (26.01)<sup>0.82</sup> = <strong>7,026 Nm³/h</strong></div>
+                    </div>
+                `,
+                recommendations: [
+                    { service: 'Normal – Presión', flow: 43.44, setpoint: '+10 – +20', connection: '2" – 3"' },
+                    { service: 'Normal – Vacío', flow: 71.23, setpoint: '-2.0', connection: '2" – 3"' },
+                    { service: '<strong>Emergencia</strong>', flow: '<strong>7,026</strong>', setpoint: '~22', connection: '6" – 8"' }
+                ]
+            },
+            'TIA-11': {
+                title: 'TIA-11 (Aguarrás Mineral)',
+                designData: {
+                    'Servicio / Fluido': 'Aguarrás Mineral (Nafta)',
+                    'Volumen Total (Vtk)': '7 m³',
+                    'Diámetro (D)': '2.30 m',
+                    'Altura (H)': '1.80 m',
+                    'Punto de Inflamación': '38 °C (No Volátil)',
+                    'Caudal Llenado (Vpf)': '20 m³/h',
+                    'Caudal Vaciado (Vpe)': '30 m³/h',
+                },
+                results: {
+                    pressure: 21.84,
+                    vacuum: 55.38,
+                    emergency: 4070
+                },
+                calculations: `
+                    <h4 class="formula-title">Venteo Normal – Presión (Out-breathing)</h4>
+                    <p>El Aguarrás es un líquido no volátil (Punto de Inflamación > 37.8°C), por lo que se aplica un factor de 1.0.</p>
+                    <div class="formula-box">
+                        <div>V<sub>Total,Out</sub> = (1.0 × 20) + (0.32 × 7<sup>0.9</sup>) = 20 + 1.84 = <strong>21.84 Nm³/h</strong></div>
+                    </div>
+                    
+                    <h4 class="formula-title">Venteo Normal – Vacío (In-breathing)</h4>
+                    <div class="formula-box">
+                        <div>V<sub>Total,In</sub> = 30 + (6.5 × 7<sup>0.7</sup>) = 30 + 25.38 = <strong>55.38 Nm³/h</strong></div>
+                    </div>
+
+                    <h4 class="formula-title">Venteo de Emergencia por Fuego</h4>
+                    <div class="formula-box">
+                        <div>A<sub>TWS</sub> = π × 2.30 × 1.80 = <strong>13.01 m²</strong></div>
+                    </div>
+                    <div class="formula-box">
+                        <div>q = 208.2 × 1.0 × (13.01)<sup>0.82</sup> = <strong>4,070 Nm³/h</strong></div>
+                    </div>
+                `,
+                recommendations: [
+                    { service: 'Normal – Presión', flow: 21.84, setpoint: '+10 – +20', connection: '2"' },
+                    { service: 'Normal – Vacío', flow: 55.38, setpoint: '-2.0', connection: '2"' },
+                    { service: '<strong>Emergencia</strong>', flow: '<strong>4,070</strong>', setpoint: '~22', connection: '4" – 6"' }
+                ]
+            },
+            'TIA-13': {
+                title: 'TIA-13 (Resinas)',
+                designData: {
+                    'Servicio / Fluido': 'Resinas',
+                    'Volumen Total (Vtk)': '29 m³',
+                    'Diámetro (D)': '3.05 m',
+                    'Altura (H)': '4.20 m',
+                    'Punto de Inflamación': '27 °C (Volátil)',
+                    'Caudal Llenado (Vpf)': '7 m³/h',
+                    'Caudal Vaciado (Vpe)': '7 m³/h',
+                },
+                results: {
+                    pressure: 20.63,
+                    vacuum: 75.64,
+                    emergency: 8995
+                },
+                calculations: `
+                    <h4 class="formula-title">Venteo Normal – Presión (Out-breathing)</h4>
+                    <p>Las Resinas son volátiles (Punto de Inflamación < 37.8°C), por lo que se aplica un factor de 2.0.</p>
+                    <div class="formula-box">
+                        <div>V<sub>Total,Out</sub> = (2.0 × 7) + (0.32 × 29<sup>0.9</sup>) = 14 + 6.63 = <strong>20.63 Nm³/h</strong></div>
+                    </div>
+                    
+                    <h4 class="formula-title">Venteo Normal – Vacío (In-breathing)</h4>
+                    <div class="formula-box">
+                        <div>V<sub>Total,In</sub> = 7 + (6.5 × 29<sup>0.7</sup>) = 7 + 68.64 = <strong>75.64 Nm³/h</strong></div>
+                    </div>
+
+                    <h4 class="formula-title">Venteo de Emergencia por Fuego</h4>
+                    <div class="formula-box">
+                        <div>A<sub>TWS</sub> = π × 3.05 × 4.20 = <strong>40.24 m²</strong></div>
+                    </div>
+                    <div class="formula-box">
+                        <div>q = 208.2 × 1.0 × (40.24)<sup>0.82</sup> = <strong>8,995 Nm³/h</strong></div>
+                    </div>
+                `,
+                recommendations: [
+                    { service: 'Normal – Presión', flow: 20.63, setpoint: '+10 – +20', connection: '2" – 3"' },
+                    { service: 'Normal – Vacío', flow: 75.64, setpoint: '-2.0', connection: '2" – 3"' },
+                    { service: '<strong>Emergencia</strong>', flow: '<strong>8,995</strong>', setpoint: '~22', connection: '8" – 10"' }
+                ]
+            },
+            'TIA-14': {
+                title: 'TIA-14 (Resinas)',
+                designData: {
+                    'Servicio / Fluido': 'Resinas',
+                    'Volumen Total (Vtk)': '29 m³',
+                    'Diámetro (D)': '3.05 m',
+                    'Altura (H)': '4.20 m',
+                    'Punto de Inflamación': '31 °C (Volátil)',
+                    'Caudal Llenado (Vpf)': '7 m³/h',
+                    'Caudal Vaciado (Vpe)': '7 m³/h',
+                },
+                results: {
+                    pressure: 20.63,
+                    vacuum: 75.64,
+                    emergency: 8995
+                },
+                calculations: `
+                    <h4 class="formula-title">Venteo Normal – Presión (Out-breathing)</h4>
+                    <p>Las Resinas son volátiles (Punto de Inflamación < 37.8°C), por lo que se aplica un factor de 2.0.</p>
+                    <div class="formula-box">
+                        <div>V<sub>Total,Out</sub> = (2.0 × 7) + (0.32 × 29<sup>0.9</sup>) = 14 + 6.63 = <strong>20.63 Nm³/h</strong></div>
+                    </div>
+                    
+                    <h4 class="formula-title">Venteo Normal – Vacío (In-breathing)</h4>
+                    <div class="formula-box">
+                        <div>V<sub>Total,In</sub> = 7 + (6.5 × 29<sup>0.7</sup>) = 7 + 68.64 = <strong>75.64 Nm³/h</strong></div>
+                    </div>
+
+                    <h4 class="formula-title">Venteo de Emergencia por Fuego</h4>
+                    <div class="formula-box">
+                        <div>A<sub>TWS</sub> = π × 3.05 × 4.20 = <strong>40.24 m²</strong></div>
+                    </div>
+                    <div class="formula-box">
+                        <div>q = 208.2 × 1.0 × (40.24)<sup>0.82</sup> = <strong>8,995 Nm³/h</strong></div>
+                    </div>
+                `,
+                recommendations: [
+                    { service: 'Normal – Presión', flow: 20.63, setpoint: '+10 – +20', connection: '2" – 3"' },
+                    { service: 'Normal – Vacío', flow: 75.64, setpoint: '-2.0', connection: '2" – 3"' },
+                    { service: '<strong>Emergencia</strong>', flow: '<strong>8,995</strong>', setpoint: '~22', connection: '8" – 10"' }
+                ]
+            }
+        };
+
+        let individualChart;
+        let comparisonChart;
+        let selectedTankId = 'TIA-10';
+
+        function updateDashboard(tankId) {
+            selectedTankId = tankId;
+            const data = tanqueData[tankId];
+
+            document.getElementById('tank-title-1').textContent = data.title;
+            document.getElementById('tank-title-2').textContent = data.title;
+            
+            const designTable = document.getElementById('design-data-table');
+            designTable.innerHTML = '';
+            for (const [key, value] of Object.entries(data.designData)) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td class="font-medium">${key}</td><td>${value}</td>`;
+                designTable.appendChild(row);
+            }
+
+            const calculationDetails = document.getElementById('calculation-details');
+            calculationDetails.innerHTML = data.calculations;
+            
+            const recommendationsTable = document.getElementById('recommendations-table');
+            recommendationsTable.innerHTML = '';
+            data.recommendations.forEach(rec => {
+                 const row = document.createElement('tr');
+                 row.innerHTML = `<td class="font-medium">${rec.service}</td><td>${rec.flow}</td><td>${rec.setpoint}</td><td>${rec.connection}</td>`;
+                 recommendationsTable.appendChild(row);
+            });
+
+            updateIndividualChart(data);
+            updateSelectorButtons();
+        }
+        
+        function updateSelectorButtons() {
+            const buttons = document.querySelectorAll('#tank-selector-container button');
+            buttons.forEach(button => {
+                if(button.dataset.tankId === selectedTankId){
+                    button.classList.remove('btn-inactive');
+                    button.classList.add('btn-active');
+                } else {
+                    button.classList.remove('btn-active');
+                    button.classList.add('btn-inactive');
+                }
+            });
+        }
+        
+        function createSelectorButtons() {
+            const container = document.getElementById('tank-selector-container');
+            Object.keys(tanqueData).forEach(tankId => {
+                const button = document.createElement('button');
+                button.textContent = tanqueData[tankId].title;
+                button.dataset.tankId = tankId;
+                button.className = 'btn btn-inactive';
+                button.onclick = () => updateDashboard(tankId);
+                container.appendChild(button);
+            });
+        }
+        
+        function updateIndividualChart(data) {
+            const ctx = document.getElementById('individualTankChart').getContext('2d');
+            const chartData = {
+                labels: ['Normal (Presión)', 'Normal (Vacío)', 'Emergencia (Fuego)'],
+                datasets: [{
+                    label: 'Caudal Requerido (Nm³/h)',
+                    data: [data.results.pressure, data.results.vacuum, data.results.emergency],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.6)',
+                        'rgba(249, 115, 22, 0.6)',
+                        'rgba(220, 38, 38, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(59, 130, 246, 1)',
+                        'rgba(249, 115, 22, 1)',
+                        'rgba(220, 38, 38, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            if (individualChart) {
+                individualChart.data = chartData;
+                individualChart.update();
+            } else {
+                individualChart = new SimpleChart(ctx).init('bar', chartData);
+            }
+        }
+
+        function createComparisonChart() {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            const datasets = [
+                {
+                    label: 'Normal (Presión)',
+                    data: Object.values(tanqueData).map(t => t.results.pressure),
+                    backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Normal (Vacío)',
+                    data: Object.values(tanqueData).map(t => t.results.vacuum),
+                    backgroundColor: 'rgba(249, 115, 22, 0.7)',
+                    borderColor: 'rgba(249, 115, 22, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Emergencia (Fuego)',
+                    data: Object.values(tanqueData).map(t => t.results.emergency),
+                    backgroundColor: 'rgba(220, 38, 38, 0.7)',
+                    borderColor: 'rgba(220, 38, 38, 1)',
+                    borderWidth: 1
+                }
+            ];
+
+            comparisonChart = new SimpleChart(ctx).init('bar', {
+                labels: Object.keys(tanqueData),
+                datasets: datasets
+            });
+        }
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            createSelectorButtons();
+            updateDashboard('TIA-10');
+            createComparisonChart();
+        });
+    </script>
+</body>
+</html>
